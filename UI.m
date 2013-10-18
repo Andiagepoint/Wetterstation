@@ -65,13 +65,20 @@ guidata(hObject, handles);
 
 prog_scope = {'luftdruck' 'markantes_wetter' 'niederschlag' 'sig_wetter' 'solarleistung' 'temperatur' 'wind'};
 
-setappdata(handles.single_request_progscope_popup,'Wind',{'Stärke' 'Richtung'});
-setappdata(handles.single_request_progscope_popup,'Temperatur',{'Max' 'Min' 'Mittlere Temp Prognose'});
-setappdata(handles.single_request_progscope_popup,'Solarleistung',{'Dauer' 'Einstrahlung'});
+% Speichert die Popup Inhalte für Single Request Prognose Details
+setappdata(handles.single_request_progscope_popup,'Wind',{'Stärke' 'Richtung' 'Gesamt' });
+setappdata(handles.single_request_progscope_popup,'Temperatur',{'Max' 'Min' 'Mittlere Temp Prognose' 'Gesamt'});
+setappdata(handles.single_request_progscope_popup,'Solarleistung',{'Dauer' 'Einstrahlung' 'Gesamt'});
 setappdata(handles.single_request_progscope_popup,'Luftdruck',{'keine Details verfügbar'});
 setappdata(handles.single_request_progscope_popup,'Signifikantes_Wetter',{'keine Details verfügbar'});
-setappdata(handles.single_request_progscope_popup,'Niederschlag',{'Menge' 'Wahrscheinlichkeit'});
-setappdata(handles.single_request_progscope_popup,'Markantes_Wetter',{'Bodennebel' 'Gefrierender Nebel' 'Bodenfrost' 'Böen' 'Niederschlag' 'Hitze' 'Kälte'});
+setappdata(handles.single_request_progscope_popup,'Niederschlag',{'Menge' 'Wahrscheinlichkeit' 'Gesamt'});
+setappdata(handles.single_request_progscope_popup,'Markantes_Wetter',{'Bodennebel' 'Gefrierender Nebel' 'Bodenfrost' 'Böen' 'Niederschlag' 'Hitze' 'Kälte' 'Gesamt'});
+
+setappdata(handles.single_request_progday_popup,'erste_Auspraegung',{'Heute' '1. Folgetag' 'Gesamt'});
+setappdata(handles.single_request_progday_popup,'zweite_Auspraegung',{'Heute' '1. Folgetag' '2. Folgetag' '3. Folgetag' 'Gesamt'});
+
+setappdata(handles.single_request_proghour_popup,'Abfragezeitpunkt',{'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
+
 h = gcf;
 
 prog_day = {'heute' 'erster_folgetag' 'zweiter_folgetag' 'dritter_folgetag'};
@@ -84,6 +91,9 @@ set(handles.dataexp_set_panel,'Visible','off');
 set(handles.single_request_panel,'Visible','off');
 set(handles.multi_request_panel,'Visible','off');
 set(handles.com_protocol_panel,'Visible','off');
+
+set(handles.single_request_proghour_popup,'String',{'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
+set(handles.multi_request_proghour_popup,'String',{'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
 
 set(h,'DockControls','on');
 
@@ -376,24 +386,38 @@ switch selected_string_prog_scope
     case 'Luftdruck'
         Ld = getappdata(handles.single_request_progscope_popup,'Luftdruck');
         set(handles.single_request_progdetail_popup,'String',Ld);
+        Ld_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
+        set(handles.single_request_progday_popup,'String',Ld_day);
     case 'Markantes Wetter'
         mW = getappdata(handles.single_request_progscope_popup,'Markantes_Wetter');
         set(handles.single_request_progdetail_popup,'String',mW);
+        mW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',mW_day);
     case 'Niederschlag'
         niederschlag = getappdata(handles.single_request_progscope_popup,'Niederschlag');
         set(handles.single_request_progdetail_popup,'String',niederschlag);
+        niederschlag_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',niederschlag_day);
     case 'Signifikantes Wetter'
         sW = getappdata(handles.single_request_progscope_popup,'Signifikantes_Wetter');
         set(handles.single_request_progdetail_popup,'String',sW);
+        sW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',sW_day);
     case 'Solarleistung'
         solarP = getappdata(handles.single_request_progscope_popup,'Solarleistung');
         set(handles.single_request_progdetail_popup,'String',solarP);
+        solarP_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
+        set(handles.single_request_progday_popup,'String',solarP_day);
     case 'Temperatur'
         tmp = getappdata(handles.single_request_progscope_popup,'Temperatur');
         set(handles.single_request_progdetail_popup,'String',tmp);
+        tmp_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',tmp_day);
     case 'Wind'
         wind = getappdata(handles.single_request_progscope_popup,'Wind');
         set(handles.single_request_progdetail_popup,'String',wind);
+        wind_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',wind_day);
     otherwise
 end
 
@@ -417,7 +441,7 @@ function single_request_progdetail_popup_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns single_request_progdetail_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from single_request_progdetail_popup
-selection = guidata(hObject,selected_string_prog_scope);
+
 
 % --- Executes during object creation, after setting all properties.
 function single_request_progdetail_popup_CreateFcn(hObject, eventdata, handles)
@@ -536,24 +560,38 @@ switch selected_string_prog_scope
     case 'Luftdruck'
         Ld = getappdata(handles.single_request_progscope_popup,'Luftdruck');
         set(handles.multi_request_progdetail_popup,'String',Ld);
+        Ld_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',Ld_day);
     case 'Markantes Wetter'
         mW = getappdata(handles.single_request_progscope_popup,'Markantes_Wetter');
         set(handles.multi_request_progdetail_popup,'String',mW);
+        mW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',mW_day);
     case 'Niederschlag'
         niederschlag = getappdata(handles.single_request_progscope_popup,'Niederschlag');
         set(handles.multi_request_progdetail_popup,'String',niederschlag);
+        niederschlag_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',niederschlag_day);
     case 'Signifikantes Wetter'
         sW = getappdata(handles.single_request_progscope_popup,'Signifikantes_Wetter');
         set(handles.multi_request_progdetail_popup,'String',sW);
+        sW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',sW_day);
     case 'Solarleistung'
         solarP = getappdata(handles.single_request_progscope_popup,'Solarleistung');
         set(handles.multi_request_progdetail_popup,'String',solarP);
+        solarP_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',solarP_day);
     case 'Temperatur'
         tmp = getappdata(handles.single_request_progscope_popup,'Temperatur');
         set(handles.multi_request_progdetail_popup,'String',tmp);
+        tmp_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',tmp_day);
     case 'Wind'
         wind = getappdata(handles.single_request_progscope_popup,'Wind');
         set(handles.multi_request_progdetail_popup,'String',wind);
+        wind_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.multi_request_progday_popup,'String',wind_day);
     otherwise
 end
 
