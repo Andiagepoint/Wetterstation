@@ -74,13 +74,6 @@ setappdata(handles.single_request_progscope_popup,'Markantes_Wetter',{'' 'Bodenn
 setappdata(handles.single_request_progday_popup,'erste_Auspraegung',{'' 'Heute' 'Erster_Folgetag' 'Gesamt'});
 setappdata(handles.single_request_progday_popup,'zweite_Auspraegung',{'' 'Heute' 'Erster_Folgetag' 'Zweiter_Folgetag' 'Dritter_Folgetag' 'Gesamt'});
 
-% set(handles.multi_request_progscope_popup,'Value',1);
-% set(handles.multi_request_progdetail_popup,'Value',1);
-% set(handles.multi_request_from_progday_popup,'Value',1);
-% set(handles.multi_request_to_progday_popup,'Value',1);
-
-
-h = gcf;
 %Alle Panels zu Beginn unsichtbar machen
 set(handles.com_set_panel,'Visible','off');
 set(handles.dataexp_set_panel,'Visible','off');
@@ -103,6 +96,7 @@ set(handles.multi_request_msg_table,'ColumnName',{'Prognosebereich', 'Prognosede
 guidata(hObject, handles);
 drawnow;
 
+h = gcf;
 set(h,'DockControls','on');
 
 

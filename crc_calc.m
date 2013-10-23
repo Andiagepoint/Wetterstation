@@ -50,4 +50,5 @@ else
     end
 end
 txdata_hex = strcat(modbus_pud_hex,crc_16);
+end
 

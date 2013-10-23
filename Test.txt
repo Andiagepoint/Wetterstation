@@ -1,0 +1,3 @@
+Markantes_Wetter Markantes_Wetter Gefrierender_Nebel Gefrierender_Nebel Zweiter_Folgetag-Nachmittag 90
+weiter_Folgetag-Nachmittag Zweiter_Folgetag-Abend Zweiter_Folgetag-Abend 03030119000215D2 03030119000215D2 1
+ nder_Nebel	Zweiter_Folgetag-Nachmittag	Zweiter_Folgetag-Abend	03030119000215D2	1

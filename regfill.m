@@ -10,18 +10,24 @@ for u = 1:numel(scope_fields)
             for t = 1:numel(day_fields)
                 hour_fields = fieldnames(data_struktur.(scope_fields{u}).(day_fields{t}));
                 for s = 1:numel(hour_fields)
-                data_struktur.(scope_fields{u}).(day_fields{t}).(hour_fields{s}) = dec2hex(register_start);
+                data_struktur.(scope_fields{u}).(day_fields{t}).(hour_fields{s}) = dec2hex(register_start,4);
                 register_start = register_start + 1;
                 end
             end
         else
             for r = 1:numel(detail_fields)
                 if strcmp(detail_fields{r},prog_detail) == 1
-                    day_fields = fieldnames(data_struktur.(scope_fields{u}).(detail_fields{r}));
-                    for t = 1:numel(day_fields)
+                    if strcmp(detail_fields{r},'Mittlere_temp_prog') == 1 
+                        day_fields = fieldnames(data_struktur.(scope_fields{u}).(detail_fields{r}));
+                        day_fields_num = numel(day_fields(1:2,1));
+                    else
+                        day_fields = fieldnames(data_struktur.(scope_fields{u}).(detail_fields{r}));
+                        day_fields_num = numel(fieldnames(data_struktur.(scope_fields{u}).(detail_fields{r})));
+                    end
+                    for t = 1:day_fields_num
                         hour_fields = fieldnames(data_struktur.(scope_fields{u}).(detail_fields{r}).(day_fields{t}));
                         for s = 1:numel(hour_fields)
-                        data_struktur.(scope_fields{u}).(detail_fields{r}).(day_fields{t}).(hour_fields{s}) = dec2hex(register_start);
+                        data_struktur.(scope_fields{u}).(detail_fields{r}).(day_fields{t}).(hour_fields{s}) = dec2hex(register_start,4);
                         register_start = register_start + 1;
                         end
                     end
