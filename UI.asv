@@ -22,7 +22,7 @@ function varargout = UI(varargin)
 
 % Edit the above text to modify the response to help UI
 
-% Last Modified by GUIDE v2.5 22-Oct-2013 22:54:10
+% Last Modified by GUIDE v2.5 27-Oct-2013 13:46:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -856,20 +856,18 @@ prog_hour_from = getappdata(handles.multi_request_from_proghour_popup,'sel_from_
 prog_day_to = getappdata(handles.multi_request_to_progday_popup,'sel_to_progday');
 prog_hour_to = getappdata(handles.multi_request_to_proghour_popup,'sel_to_proghour');
 
-% Datenstruktur aus base Workspace zugänglich machen
-data = evalin('base','data');
-
 % Argumente bündeln
-popup_scope_detail = {prog_scope,prog_detail};
-popup_from = {prog_day_from,prog_hour_from};
-popup_to = {prog_day_to,prog_hour_to};
+popup_scope_detail = {prog_scope, prog_detail};
+popup_from = {prog_day_from, prog_hour_from};
+popup_to = {prog_day_to, prog_hour_to};
 
 
 % Registeraddressen ermitteln
-start_reg_address = get_reg_address(popup_scope_detail, popup_from, data);
-end_reg_address = get_reg_address(popup_scope_detail, popup_to, data);
+start_reg_address = get_reg_address(popup_scope_detail, popup_from);
+end_reg_address = get_reg_address(popup_scope_detail, popup_to);
 
-device_address = dec2hex(str2num(get(handles.comset_dev_address_edit,'String')),2);
+device_address = dec2hex(str2num(get(handles.comset_device_id_edit,'String')),2);
+setappdata(handles.comset_device_id_edit,'dev_address',device_address);
 
 func_code = dec2hex(3,2);
 
@@ -897,18 +895,18 @@ selected_cells = eventdata.Indices;
 setappdata(handles.multi_request_msg_table,'SelRow',selected_cells(1));
 
 
-function comset_dev_address_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_dev_address_edit (see GCBO)
+function comset_device_id_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_device_id_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of comset_dev_address_edit as text
-%        str2double(get(hObject,'String')) returns contents of comset_dev_address_edit as a double
+% Hints: get(hObject,'String') returns contents of comset_device_id_edit as text
+%        str2double(get(hObject,'String')) returns contents of comset_device_id_edit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function comset_dev_address_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to comset_dev_address_edit (see GCBO)
+function comset_device_id_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to comset_device_id_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1100,6 +1098,180 @@ parity = getappdata(handles.comset_parity_popup,'sel_parity');
 comport = strcat('COM',get(handles.comset_com_adress_edit,'String'));
 stopbit = str2double(get(handles.comset_stop_edit,'String'));
 databit = str2double(get(handles.comset_data_edit,'String'));
+
 open_serial_port( comport, baudrate, databit, parity, stopbit );
 set(handles.comset_connection_status,'BackgroundColor',[0 1 0]);
 set(handles.comset_connection_status,'String','Verbunden');
+
+
+function single_request_response_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_response_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of single_request_response_edit as text
+%        str2double(get(hObject,'String')) returns contents of single_request_response_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_response_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_response_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in single_request_add_response_button.
+function single_request_add_response_button_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_add_response_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in single_request_remove_response.
+function single_request_remove_response_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_remove_response (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in single_request_save_response.
+function single_request_save_response_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_save_response (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in single_request_remove_all_responses.
+function single_request_remove_all_responses_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_remove_all_responses (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+function comset_temp_offset_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_temp_offset_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of comset_temp_offset_edit as text
+%        str2double(get(hObject,'String')) returns contents of comset_temp_offset_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function comset_temp_offset_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to comset_temp_offset_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function comset_utc_offset_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_utc_offset_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of comset_utc_offset_edit as text
+%        str2double(get(hObject,'String')) returns contents of comset_utc_offset_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function comset_utc_offset_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to comset_utc_offset_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in comset_settings_button.
+function comset_settings_button_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_settings_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+station = dec2hex(str2double(get(handles.comset_station_edit,'String')),4);
+city_id = dec2hex(str2double(get(handles.comset_city_id_edit,'String')),4);
+temp_offset = dec2hex(str2double(get(handles.comset_temp_offset_edit,'String')),4);
+utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
+device_id = dec2hex(str2double(get(handles.comset_device_id_edit,'String')),2);
+send_settings(station,city_id,temp_offset,device_id);
+
+% --- Executes on button press in comset_reset_button.
+function comset_reset_button_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_reset_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+set(handles.comset_station_edit,'String','1');
+set(handles.comset_city_id_edit,'String','353');
+set(handles.comset_temp_offset_edit,'String','0');
+set(handles.comset_utc_offset_edit,'String','0');
+set(handles.comset_device_id_edit,'String','03');
+station = str2double(get(handles.comset_station_edit,'String'));
+city_id = str2double(get(handles.comset_city_id_edit,'String'));
+temp_offset = str2double(get(handles.comset_temp_offset_edit,'String'));
+utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
+device_id = str2double(get(handles.comset_device_id_edit,'String'));
+
+% --- Executes on selection change in com_protocol_listbox.
+function com_protocol_listbox_Callback(hObject, eventdata, handles)
+% hObject    handle to com_protocol_listbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns com_protocol_listbox contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from com_protocol_listbox
+
+
+% --- Executes during object creation, after setting all properties.
+function com_protocol_listbox_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to com_protocol_listbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in com_protocol_clear_list_button.
+function com_protocol_clear_list_button_Callback(hObject, eventdata, handles)
+% hObject    handle to com_protocol_clear_list_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in comset_disp_act_values_button.
+function comset_disp_act_values_button_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_disp_act_values_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+device_id = get(handles.comset_device_id_text,'String');
+regadd_temp_offset = get_reg_address('temperature_offset');
+regadd_city_id = get_reg_address('city_id');
+regadd_transm_stat = get_reg_address('transmitting_station');
+
+temp_offset_msg = crc_calc(build_regread_modbus_msg(device_id, regadd_temp_offset,'0001'));
+city_id_msg = crc_calc(build_regread_modbus_msg(device_id, regadd_city_id,'0001'));
+transm_stat_msg = crc_calc(build_regread_modbus_msg(device_id, regadd_transm_stat,'0001'));
+
+temp_offset_value = send_and_receive_data(temp_offset_msg);
+city_id_value = send_and_receive_data(city_id_msg);
+transm_stat_value = send_and_receive_data(transm_stat_msg);
+

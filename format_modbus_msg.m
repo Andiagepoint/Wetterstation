@@ -1,4 +1,4 @@
-function [ txdata ] = send_modbus_msg( modbus_msg_crc )
+function [ txdata ] = format_modbus_msg( modbus_msg_crc )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 for e = 2:2:(size(modbus_msg_crc,2)-2)
@@ -13,6 +13,5 @@ for e = 2:2:(size(modbus_msg_crc,2)-2)
 end
 txdata = regexp(string,':','split');
 txdata = hex2dec(txdata);
-
 end
 
