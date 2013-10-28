@@ -12,12 +12,12 @@ if nargin == 1
     end
 else
     prog_detail_field = getfield(data,reg_name{1});
-    if strcmp(reg_name{2},'keine Details verfügbar') == 1 || isempty(reg_name{2}) == 1
-        prog_hour_field = getfield(prog_detail_field, varargin{1});
-        reg_address = getfield(prog_hour_field, varargin{2});
+    if strcmp(reg_name{1},'keine Details verfügbar') == 1 || isempty(reg_name{2}) == 1
+        prog_hour_field = getfield(prog_detail_field, char(varargin{1}(1)));
+        reg_address = getfield(prog_hour_field, char(varargin{1}(2)));
     else
         prog_day_field = getfield(prog_detail_field,reg_name{2});
-        prog_hour_field = getfield(prog_day_field, varargin{1});
-        reg_address = getfield(prog_hour_field, varargin{2});
+        prog_hour_field = getfield(prog_day_field, char(varargin{1}(1)));
+        reg_address = getfield(prog_hour_field, char(varargin{1}(2)));
     end
 end
