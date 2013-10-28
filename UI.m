@@ -93,6 +93,10 @@ set(handles.comset_baudrate_popup,'String',{'' '9600' '19200'});
 %Benennung der Tabellenspalten auf dem Panel Sammelanfrage
 set(handles.multi_request_msg_table,'ColumnName',{'Prognosebereich', 'Prognosedetail', 'Prognosestart', 'Prognoseende', 'Modbus Nachricht', 'Abrufen'});
 
+%Initialisiere Protocol Liste
+header = sprintf('%s %s','Communication protocol: ',datestr(now));
+set(handles.com_protocol_listbox,'String',header);
+
 guidata(hObject, handles);
 drawnow;
 
@@ -1255,7 +1259,8 @@ function com_protocol_clear_list_button_Callback(hObject, eventdata, handles)
 % hObject    handle to com_protocol_clear_list_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+header = sprintf('%s %s','Communication protocol: ',datestr(now));
+set(handles.com_protocol_listbox,'String',header);
 
 % --- Executes on button press in comset_disp_act_values_button.
 function comset_disp_act_values_button_Callback(hObject, eventdata, handles)
@@ -1271,7 +1276,7 @@ temp_offset_msg = crc_calc(build_regread_modbus_msg(device_id, regadd_temp_offse
 city_id_msg = crc_calc(build_regread_modbus_msg(device_id, regadd_city_id,'0001'));
 transm_stat_msg = crc_calc(build_regread_modbus_msg(device_id, regadd_transm_stat,'0001'));
 
-temp_offset_value = send_and_receive_data(temp_offset_msg);
+temp_offset_value = send_and_receive_data(temp_offset_msg, hObject, handles);
 city_id_value = send_and_receive_data(city_id_msg);
 transm_stat_value = send_and_receive_data(transm_stat_msg);
 

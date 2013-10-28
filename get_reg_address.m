@@ -10,16 +10,6 @@ if nargin == 1
     else
         reg_address = dec2hex(getfield(data.Communication_Settings.register,reg_name),4); 
     end
-
-%     prog_detail_field = getfield(data,popup_scope_detail{1});
-%     if strcmp(popup_scope_detail{2},'keine Details verfügbar') == 1 || isempty(popup_scope_detail{2}) == 1
-%         prog_hour_field = getfield(prog_detail_field, popup_interval{1});
-%         reg_address = getfield(prog_hour_field,popup_interval{2});
-%     else
-%         prog_day_field = getfield(prog_detail_field,popup_scope_detail{2});
-%         prog_hour_field = getfield(prog_day_field, popup_interval{1});
-%         reg_address = getfield(prog_hour_field,popup_interval{2});
-%     end
 else
     prog_detail_field = getfield(data,reg_name{1});
     if strcmp(reg_name{2},'keine Details verfügbar') == 1 || isempty(reg_name{2}) == 1
@@ -30,5 +20,4 @@ else
         prog_hour_field = getfield(prog_day_field, varargin{1});
         reg_address = getfield(prog_hour_field, varargin{2});
     end
-
 end
