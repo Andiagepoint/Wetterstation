@@ -37,7 +37,7 @@ else
             output_address = dec2hex(rxdata(3:4),4);
             output_value = dec2hex(rxdata(5:6),4);
         case 6
-%             reg_address = dec2hex(rxdata(3:4),4);
+            reg_address = dec2hex(rxdata(3:4),4);
             response_data = dec2hex(rxdata(5:6),4);
             [crc_check_value, response_msg] = crc_check(rxdata);
         otherwise

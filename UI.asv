@@ -1213,7 +1213,7 @@ city_id = dec2hex(str2double(get(handles.comset_city_id_edit,'String')),4);
 temp_offset = dec2hex(str2double(get(handles.comset_temp_offset_edit,'String')),4);
 utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
 device_id = dec2hex(str2double(get(handles.comset_device_id_edit,'String')),2);
-request_value_list = {station, city_id, temp_offset, device_id};
+request_value_list = char(station, city_id, temp_offset, device_id);
 send_settings(request_value_list);
 
 % --- Executes on button press in comset_reset_button.
