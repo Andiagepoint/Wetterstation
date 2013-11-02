@@ -103,6 +103,11 @@ drawnow;
 h = gcf;
 set(h,'DockControls','on');
 
+% Load data structure with reg addresses to workspace
+[filename, pathname] = uigetfile('*.mat','Load register addresses to workspace','C:\Users\AndiPower\Documents\MATLAB\Wetterstation\data_structure_wetterstation.mat');
+load(strcat(pathname,filename));
+assignin('base','data',data);
+
 
 % --- Outputs from this function are returned to the command line.
 function varargout = UI_OutputFcn(hObject, eventdata, handles) 
@@ -704,11 +709,17 @@ function multi_request_msg_sendbutton_Callback(hObject, eventdata, handles)
 % hObject    handle to multi_request_msg_sendbutton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+serial_interface_check();
+data_struct_check();
+
 table_data = get(handles.multi_request_msg_table,'Data');
 t = size(table_data,1);
 for r = 1:t
+    if table_data{r,6} == 1
     msg = table_data{r,5};
-    [ txdata ] = send_modbus_msg( msg );
+    field_name = {table_data{r,1} table_data{r,2} table_data{r,3} table_data{r,4}};
+    [ txdata ] = send_and_receive_data(msg, field_name, hObject, handles);
+    end
 end
 
 % --- Executes on selection change in single_request_updateint_popup.
@@ -852,6 +863,8 @@ function multi_request_gen_msg_button_Callback(hObject, eventdata, handles)
 % hObject    handle to multi_request_gen_msg_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+data_struct_check();
+
 % Popup Auswahl ermitteln
 prog_scope = getappdata(handles.multi_request_progscope_popup,'sel_progscope');
 prog_detail = getappdata(handles.multi_request_progdetail_popup,'sel_progdetail');
@@ -1087,26 +1100,86 @@ function comset_close_serial_port_Callback(hObject, eventdata, handles)
 % hObject    handle to comset_close_serial_port (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% Make the serial interface available in the function
+
+% Check whether serial interface is available in workspace
+serial_interface_check();
+
 serial_interface = evalin('base','serial_interface');
+
+% Close serial interface
 close_serial_port( serial_interface );
-set(handles.comset_connection_status,'BackgroundColor',[1 0 0]);
-set(handles.comset_connection_status,'String','Nicht verbunden');
+
+% Show disconnected status in gui through color change to red
+set(handles.status_con_status,'BackgroundColor',[1 0 0]);
+set(handles.status_con_status,'String','Nicht verbunden');
+set(handles.status_con_quality_text,'Backgroundcolor',[1 0 0]);
+
+% Clears the bar plot
+cla(handles.status_con_quality_bar);
+set(handles.status_con_quality_bar,'XLim',[-0.5 10]);
+set(handles.status_con_quality_bar,'YLim',[0 10]);
+set(handles.status_con_quality_bar,'XTickLabelMode','Manual');
+set(handles.status_con_quality_bar,'XTick',[]);
+set(handles.status_con_quality_bar,'YTickLabelMode','Manual');
+set(handles.status_con_quality_bar,'YTick',[]);
+
 
 % --- Executes on button press in comset_open_serial_port.
 function comset_open_serial_port_Callback(hObject, eventdata, handles)
 % hObject    handle to comset_open_serial_port (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% Check if data structure is available
+data_struct_check();
+
+h = waitbar(0,'Please wait while establishing serial interface...');
+% Read values from popup menu or edit fields
+waitbar(1/4,h)
+
 baudrate = str2double(getappdata(handles.comset_baudrate_popup,'sel_baudrate'));
 parity = getappdata(handles.comset_parity_popup,'sel_parity');
 comport = strcat('COM',get(handles.comset_com_adress_edit,'String'));
 stopbit = str2double(get(handles.comset_stop_edit,'String'));
 databit = str2double(get(handles.comset_data_edit,'String'));
 
+% Open serial port
 open_serial_port( comport, baudrate, databit, parity, stopbit );
-set(handles.comset_connection_status,'BackgroundColor',[0 1 0]);
-set(handles.comset_connection_status,'String','Verbunden');
 
+waitbar(2/4,h)
+% Indicate connection status in the gui with a color change to green
+set(handles.status_con_status,'BackgroundColor',[0 1 0]);
+set(handles.status_con_status,'String','Verbunden');
+
+% Check connection quality
+device_id = get(handles.comset_device_id_text,'String');
+request_list = {'quality'};
+
+% Receive the quality signal 
+request_value = read_sr(device_id, request_list);
+
+waitbar(3/4,h)
+% Displays the signal quality in a bar plot
+bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');
+hold on;
+if request_value < 9
+bar(handles.status_con_quality_bar,(request_value+1:9),(request_value+1:9),'w');
+end
+set(handles.status_con_quality_bar,'XLim',[-0.5 10]);
+set(handles.status_con_quality_bar,'YLim',[0 10]);
+set(handles.status_con_quality_bar,'XTickLabelMode','Manual');
+set(handles.status_con_quality_bar,'XTick',[]);
+set(handles.status_con_quality_bar,'YTickLabelMode','Manual');
+set(handles.status_con_quality_bar,'YTick',[]);
+
+waitbar(4/4,h)
+% Changes Backgroundcolor of quality text in GUI
+if request_value >= 5
+    set(handles.status_con_quality_text,'Backgroundcolor',[0 1 0]);
+end 
+
+close(h)
 
 function single_request_response_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to single_request_response_edit (see GCBO)
@@ -1208,29 +1281,63 @@ function comset_settings_button_Callback(hObject, eventdata, handles)
 % hObject    handle to comset_settings_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% Check whether serial interface is established and data structure is in
+% workspace available
+serial_interface_check();
+data_struct_check();
+
+% Get values from edit box
 station = dec2hex(str2double(get(handles.comset_station_edit,'String')),4);
 city_id = dec2hex(str2double(get(handles.comset_city_id_edit,'String')),4);
 temp_offset = dec2hex(str2double(get(handles.comset_temp_offset_edit,'String')),4);
 utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
 device_id = dec2hex(str2double(get(handles.comset_device_id_edit,'String')),2);
-request_value_list = {station, city_id, temp_offset, device_id};
-send_settings(request_value_list);
+
+% Values to be written to the single registers
+reg_value_list = {station, city_id, temp_offset, device_id};
+
+% Registers to be written to
+reg_add_list = {'transmitting_station', 'city_id', 'temperature_offset'};
+
+% Write operation
+write_sr(reg_value_list, reg_add_list);
+
+% Read registers and display actual values in GUI
+comset_disp_act_values_button_Callback(hObject, eventdata, handles);
 
 % --- Executes on button press in comset_reset_button.
 function comset_reset_button_Callback(hObject, eventdata, handles)
 % hObject    handle to comset_reset_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+% Check whether serial interface is established and data structure is in
+% workspace available
+serial_interface_check();
+data_struct_check();
+
 set(handles.comset_station_edit,'String','1');
 set(handles.comset_city_id_edit,'String','353');
 set(handles.comset_temp_offset_edit,'String','0');
 set(handles.comset_utc_offset_edit,'String','0');
 set(handles.comset_device_id_edit,'String','03');
-station = str2double(get(handles.comset_station_edit,'String'));
-city_id = str2double(get(handles.comset_city_id_edit,'String'));
-temp_offset = str2double(get(handles.comset_temp_offset_edit,'String'));
+
+station = dec2hex(str2double(get(handles.comset_station_edit,'String')),4);
+city_id = dec2hex(str2double(get(handles.comset_city_id_edit,'String')),4);
+temp_offset = dec2hex(str2double(get(handles.comset_temp_offset_edit,'String')),4);
 utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
-device_id = str2double(get(handles.comset_device_id_edit,'String'));
+device_id = dec2hex(str2double(get(handles.comset_device_id_edit,'String')),2);
+
+% Values to be written to the single registers
+reg_value_list = {station, city_id, temp_offset, device_id};
+
+% Registers to be written to
+reg_add_list = {'transmitting_station', 'city_id', 'temperature_offset'};
+
+% Write operation
+write_sr(reg_value_list, reg_add_list);
+
+% Read registers and display actual values in GUI
+comset_disp_act_values_button_Callback(hObject, eventdata, handles);
 
 % --- Executes on selection change in com_protocol_listbox.
 function com_protocol_listbox_Callback(hObject, eventdata, handles)
@@ -1260,6 +1367,8 @@ function com_protocol_clear_list_button_Callback(hObject, eventdata, handles)
 % hObject    handle to com_protocol_clear_list_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% Set the header for the protocol listbox
 header = sprintf('%s %s','Communication protocol: ',datestr(now));
 set(handles.com_protocol_listbox,'String',header);
 
@@ -1268,28 +1377,22 @@ function comset_disp_act_values_button_Callback(hObject, eventdata, handles)
 % hObject    handle to comset_disp_act_values_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-if evalin('base','exist(''serial_interface'')') == 0
-    errordlg('No modbus connection established! Please connect to serial interface!','Connection error');
-end
 
-wb = waitbar(0,'Please wait...');
+% Check if serial interface is established and data struct is available in
+% workspace
+serial_interface_check();
+data_struct_check();
 
+% Receive device id from edit field, define request list 
 device_id = get(handles.comset_device_id_text,'String');
 request_list = {'temperature_offset', 'city_id', 'transmitting_station'};  
 
-for t = 1:size(request_list,2)
-    waitbar(t/size(request_list,2))
-    [reg_address, field_name] = get_reg_address(request_list{t});
-    reg_num = '0001';
-    modbus_msg = gen_msg(device_id, reg_address, reg_num, 'rr');
-    request_value(t) = send_and_receive_data(modbus_msg, field_name);
-end
+request_value = read_sr(device_id, request_list);
 
+% Update text fields in the gui
 set(handles.comset_temp_offset_value,'String',num2str(request_value(1)));
 set(handles.comset_city_id_value,'String',num2str(request_value(2)));
 set(handles.comset_station_value,'String',num2str(request_value(3)));
-
-close(wb);
 
 guidata(hObject,handles);
 

@@ -29,9 +29,7 @@ else
             end
         case 3
             byte_count = rxdata(3);
-            for t = 1:2:byte_count
-                response_data = data_proc( rxdata(3+t:end-2), reg_address, field_name );
-            end
+            response_data = data_proc( rxdata(4:end-2), reg_address, field_name );
             [crc_check_value, response_msg] = crc_check(rxdata);
         case 5
             output_address = dec2hex(rxdata(3:4),4);

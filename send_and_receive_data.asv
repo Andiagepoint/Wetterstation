@@ -13,9 +13,15 @@ hcom_protocol_listbox = findobj('Tag','com_protocol_listbox');
 
 listbox_text = get(hcom_protocol_listbox,'String');
 
-pause(0.5);
+% readasync(serial_interface);
 
-bytes_num = serial_interface.BytesAvailable;
+serial_interface.BytesAvailableFcnCount = 1;
+serial_interface.BytesAvailableFcnMode = 'bytes';
+serial_interface.BytesAvailableFcn = @test(
+
+if bytes_num == 0
+   bytes_num = 16; 
+end
 
 [rxdata] = fread(serial_interface, bytes_num, 'uint8');
 

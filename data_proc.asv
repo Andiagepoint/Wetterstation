@@ -20,17 +20,12 @@ else
     lfvara = 1;
     lfvare = 2;
     
-    if shindex == ehindex && sdindex ~= edindex
-        ehindex = 4;
-    end
+    if shindex == ehindex 
     
     
     for t = sdindex:edindex
     for s = shindex:ehindex
-        
-        if lfvare > size(value,1)
-            break;
-        end
+
         hi_byte = dec2hex(value(lfvara),2);
         lo_byte = dec2hex(value(lfvare),2);
         hex_value = strcat(hi_byte,lo_byte);
@@ -39,7 +34,6 @@ else
 
         lfvara = lfvara + 2;
         lfvare = lfvare + 2;
-        
     end
     end
 end
