@@ -122,9 +122,7 @@ varargout{1} = handles.output;
 
 % --------------------------------------------------------------------
 function menu_status_Callback(hObject, eventdata, handles)
-% hObject    handle to menu_status (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 set(handles.com_set_panel,'Visible','off');
 set(handles.dataexp_set_panel,'Visible','off');
 set(handles.single_request_panel,'Visible','off');
@@ -139,9 +137,7 @@ function menu_data_request_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function submenu_single_data_request_Callback(hObject, eventdata, handles)
-% hObject    handle to submenu_single_data_request (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 set(handles.com_set_panel,'Visible','off');
 set(handles.dataexp_set_panel,'Visible','off');
 set(handles.single_request_panel,'Visible','on');
@@ -150,9 +146,7 @@ set(handles.com_protocol_panel,'Visible','off');
 
 % --------------------------------------------------------------------
 function submenu_multi_data_request_Callback(hObject, eventdata, handles)
-% hObject    handle to submenu_multi_data_request (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 set(handles.com_set_panel,'Visible','off');
 set(handles.dataexp_set_panel,'Visible','off');
 set(handles.single_request_panel,'Visible','off');
@@ -161,9 +155,7 @@ set(handles.com_protocol_panel,'Visible','off');
 
 % --------------------------------------------------------------------
 function menu_protocol_config_Callback(hObject, eventdata, handles)
-% hObject    handle to menu_protocol_config (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 set(handles.com_set_panel,'Visible','on');
 set(handles.dataexp_set_panel,'Visible','off');
 set(handles.single_request_panel,'Visible','off');
@@ -172,10 +164,7 @@ set(handles.com_protocol_panel,'Visible','off');
 
 % --------------------------------------------------------------------
 function menu_data_export_Callback(hObject, eventdata, handles)
-% hObject    handle to menu_data_export (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% openfig('Settings.fig')
+
 set(handles.com_set_panel,'Visible','off');
 set(handles.dataexp_set_panel,'Visible','on');
 set(handles.single_request_panel,'Visible','off');
@@ -203,9 +192,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in dataexp_select_data_storage_folder_button.
 function dataexp_select_data_storage_folder_button_Callback(hObject, eventdata, handles)
-% hObject    handle to dataexp_select_data_storage_folder_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 single_data_pathname = uigetdir;
 set(handles.dataexp_show_data_storage_path_edit,'String',single_data_pathname);
 single_data_pathname = get(handles.dataexp_show_data_storage_path_edit,'string');
@@ -213,9 +200,6 @@ single_data_pathname = get(handles.dataexp_show_data_storage_path_edit,'string')
 
 % --- Executes on selection change in single_request_progscope_popup.
 function single_request_progscope_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_progscope_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns single_request_progscope_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from single_request_progscope_popup
@@ -387,9 +371,6 @@ function auto_sammel_abruf_Callback(hObject, eventdata, handles)
 
 % --- Executes on selection change in multi_request_progscope_popup.
 function multi_request_progscope_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_progscope_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_progscope_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_progscope_popup
@@ -456,9 +437,6 @@ end
 
 % --- Executes on selection change in multi_request_progdetail_popup.
 function multi_request_progdetail_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_progdetail_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_progdetail_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_progdetail_popup
@@ -482,9 +460,6 @@ end
 
 % --- Executes on selection change in multi_request_from_progday_popup.
 function multi_request_from_progday_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_from_progday_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_from_progday_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_from_progday_popup
@@ -509,9 +484,6 @@ end
 
 % --- Executes on selection change in multi_request_from_proghour_popup.
 function multi_request_from_proghour_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_from_proghour_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_from_proghour_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_from_proghour_popup
@@ -536,9 +508,6 @@ end
 
 % --- Executes on selection change in multi_request_to_proghour_popup.
 function multi_request_to_proghour_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_to_proghour_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_to_proghour_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_to_proghour_popup
@@ -563,9 +532,6 @@ end
 
 % --- Executes on selection change in multi_request_to_progday_popup.
 function multi_request_to_progday_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_to_progday_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_to_progday_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_to_progday_popup
@@ -644,9 +610,7 @@ function multi_request_update_checkbox_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in multi_request_msg_add_button.
 function multi_request_msg_add_button_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_add_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 table_data = get(handles.multi_request_msg_table, 'Data');
 add_table_data = getappdata(handles.multi_request_gen_msg_button,'table_data');
 if isempty(table_data) == 1
@@ -664,9 +628,7 @@ drawnow;
 
 % --- Executes on button press in multi_request_msg_remove_button.
 function multi_request_msg_remove_button_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_remove_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 selected_row = getappdata(handles.multi_request_msg_table,'SelRow');
 table_data = get(handles.multi_request_msg_table, 'Data');
 table_data(selected_row,:)=[];
@@ -676,9 +638,7 @@ drawnow;
 
 % --- Executes on button press in multi_request_msg_removeall_button.
 function multi_request_msg_removeall_button_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_removeall_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 table_data = get(handles.multi_request_msg_table, 'Data');
 table_data(:,:)=[];
 set(handles.multi_request_msg_table,'Data',table_data);
@@ -687,9 +647,7 @@ drawnow;
 
 % --- Executes on button press in multi_request_msg_savelist_button.
 function multi_request_msg_savelist_button_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_savelist_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 [filename,path] = uiputfile('*.mat');
 table_data = get(handles.multi_request_msg_table,'Data');
 save(strcat(path,filename),'table_data');
@@ -697,18 +655,14 @@ save(strcat(path,filename),'table_data');
 
 % --- Executes on button press in multi_request_msg_loadlist_button.
 function multi_request_msg_loadlist_button_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_loadlist_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 [filename,path]  = uigetfile('*.mat');
 load(strcat(path,filename));
 set(handles.multi_request_msg_table,'Data',table_data);
 
 % --- Executes on button press in multi_request_msg_sendbutton.
 function multi_request_msg_sendbutton_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_sendbutton (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 serial_interface_check();
 data_struct_check();
 
@@ -778,9 +732,7 @@ end
 
 % --- Executes on button press in dataexp_select_protocol_storage_folder_button.
 function dataexp_select_protocol_storage_folder_button_Callback(hObject, eventdata, handles)
-% hObject    handle to dataexp_select_protocol_storage_folder_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 protocol_pathname = uigetdir;
 set(handles.dataexp_show_protocol_storage_path_edit,'String',protocol_pathname);
 protocol_pathname = get(handles.dataexp_show_protocol_storage_path_edit,'String');
@@ -809,9 +761,7 @@ end
 
 % --- Executes on button press in dataexp_select_cumdata_storage_folder_button.
 function dataexp_select_cumdata_storage_folder_button_Callback(hObject, eventdata, handles)
-% hObject    handle to dataexp_select_cumdata_storage_folder_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 multi_data_pathname = uigetdir;
 set(handles.dataexp_show_cumdata_storage_path_edit,'String',multi_data_pathname);
 multi_data_pathname = get(handles.dataexp_show_cumdata_storage_path_edit,'String');
@@ -860,9 +810,7 @@ function dataexp_save_storage_path_settings_button_Callback(hObject, eventdata, 
 
 % --- Executes on button press in multi_request_gen_msg_button.
 function multi_request_gen_msg_button_Callback(hObject, eventdata, handles)
-% hObject    handle to multi_request_gen_msg_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 data_struct_check();
 
 % Popup Auswahl ermitteln
@@ -904,10 +852,7 @@ drawnow;
 
 % --- Executes when selected cell(s) is changed in multi_request_msg_table.
 function multi_request_msg_table_CellSelectionCallback(hObject, eventdata, handles)
-% hObject    handle to multi_request_msg_table (see GCBO)
-% eventdata  structure with the following fields (see UITABLE)
-%	Indices: row and column indices of the cell(s) currently selecteds
-% handles    structure with handles and user data (see GUIDATA)
+
 selected_cells = eventdata.Indices;
 setappdata(handles.multi_request_msg_table,'SelRow',selected_cells(1));
 
@@ -936,9 +881,6 @@ end
 
 % --- Executes on selection change in comset_baudrate_popup.
 function comset_baudrate_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_baudrate_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns comset_baudrate_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from comset_baudrate_popup
@@ -962,9 +904,6 @@ end
 
 % --- Executes on selection change in comset_parity_popup.
 function comset_parity_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_parity_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns comset_parity_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from comset_parity_popup
@@ -1097,10 +1036,6 @@ end
 
 % --- Executes on button press in comset_close_serial_port.
 function comset_close_serial_port_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_close_serial_port (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% Make the serial interface available in the function
 
 % Check whether serial interface is available in workspace
 serial_interface_check();
@@ -1127,9 +1062,6 @@ set(handles.status_con_quality_bar,'YTick',[]);
 
 % --- Executes on button press in comset_open_serial_port.
 function comset_open_serial_port_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_open_serial_port (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Check if data structure is available
 data_struct_check();
@@ -1157,29 +1089,35 @@ device_id = get(handles.comset_device_id_text,'String');
 request_list = {'quality'};
 
 % Receive the quality signal 
-request_value = read_sr(device_id, request_list);
+request_value = read_sr(device_id, request_list, hObject, handles);
 
-waitbar(3/4,h)
-% Displays the signal quality in a bar plot
-bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');
-hold on;
-if request_value < 9
-bar(handles.status_con_quality_bar,(request_value+1:9),(request_value+1:9),'w');
+if isempty(request_value)
+    close(h)
+    errordlg('Communication quality could not be determined as no data has been received after request','Communication error');
+    return;
+else
+    waitbar(3/4,h)
+    % Displays the signal quality in a bar plot
+    bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');
+    hold on;
+    if request_value < 9
+    bar(handles.status_con_quality_bar,(request_value+1:9),(request_value+1:9),'w');
+    end
+    set(handles.status_con_quality_bar,'XLim',[-0.5 10]);
+    set(handles.status_con_quality_bar,'YLim',[0 10]);
+    set(handles.status_con_quality_bar,'XTickLabelMode','Manual');
+    set(handles.status_con_quality_bar,'XTick',[]);
+    set(handles.status_con_quality_bar,'YTickLabelMode','Manual');
+    set(handles.status_con_quality_bar,'YTick',[]);
+
+    waitbar(4/4,h)
+    % Changes Backgroundcolor of quality text in GUI
+    if request_value >= 5
+        set(handles.status_con_quality_text,'Backgroundcolor',[0 1 0]);
+    end 
+
+    close(h)
 end
-set(handles.status_con_quality_bar,'XLim',[-0.5 10]);
-set(handles.status_con_quality_bar,'YLim',[0 10]);
-set(handles.status_con_quality_bar,'XTickLabelMode','Manual');
-set(handles.status_con_quality_bar,'XTick',[]);
-set(handles.status_con_quality_bar,'YTickLabelMode','Manual');
-set(handles.status_con_quality_bar,'YTick',[]);
-
-waitbar(4/4,h)
-% Changes Backgroundcolor of quality text in GUI
-if request_value >= 5
-    set(handles.status_con_quality_text,'Backgroundcolor',[0 1 0]);
-end 
-
-close(h)
 
 function single_request_response_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to single_request_response_edit (see GCBO)
@@ -1278,9 +1216,7 @@ end
 
 % --- Executes on button press in comset_settings_button.
 function comset_settings_button_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_settings_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 % Check whether serial interface is established and data structure is in
 % workspace available
 serial_interface_check();
@@ -1300,16 +1236,14 @@ reg_value_list = {station, city_id, temp_offset, device_id};
 reg_add_list = {'transmitting_station', 'city_id', 'temperature_offset'};
 
 % Write operation
-write_sr(reg_value_list, reg_add_list);
+write_sr(reg_value_list, reg_add_list, hObject, handles);
 
 % Read registers and display actual values in GUI
 comset_disp_act_values_button_Callback(hObject, eventdata, handles);
 
 % --- Executes on button press in comset_reset_button.
 function comset_reset_button_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_reset_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
 % Check whether serial interface is established and data structure is in
 % workspace available
 serial_interface_check();
@@ -1334,7 +1268,7 @@ reg_value_list = {station, city_id, temp_offset, device_id};
 reg_add_list = {'transmitting_station', 'city_id', 'temperature_offset'};
 
 % Write operation
-write_sr(reg_value_list, reg_add_list);
+write_sr(reg_value_list, reg_add_list, hObject, handles);
 
 % Read registers and display actual values in GUI
 comset_disp_act_values_button_Callback(hObject, eventdata, handles);
@@ -1364,9 +1298,6 @@ end
 
 % --- Executes on button press in com_protocol_clear_list_button.
 function com_protocol_clear_list_button_Callback(hObject, eventdata, handles)
-% hObject    handle to com_protocol_clear_list_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Set the header for the protocol listbox
 header = sprintf('%s %s','Communication protocol: ',datestr(now));
@@ -1374,9 +1305,6 @@ set(handles.com_protocol_listbox,'String',header);
 
 % --- Executes on button press in comset_disp_act_values_button.
 function comset_disp_act_values_button_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_disp_act_values_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Check if serial interface is established and data struct is available in
 % workspace
@@ -1387,7 +1315,7 @@ data_struct_check();
 device_id = get(handles.comset_device_id_text,'String');
 request_list = {'temperature_offset', 'city_id', 'transmitting_station'};  
 
-request_value = read_sr(device_id, request_list);
+request_value = read_sr(device_id, request_list, hObject, handles);
 
 % Update text fields in the gui
 set(handles.comset_temp_offset_value,'String',num2str(request_value(1)));
