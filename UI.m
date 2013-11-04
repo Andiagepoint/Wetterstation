@@ -64,7 +64,7 @@ guidata(hObject, handles);
 
 % Speichert die Popup Inhalte für Single Request Prognose Details
 setappdata(handles.single_request_progscope_popup,'Wind',{'' 'Staerke' 'Richtung' 'Gesamt' });
-setappdata(handles.single_request_progscope_popup,'Temperatur',{'' 'Max' 'Min' 'Mittlere_Temp_Prognose' 'Gesamt'});
+setappdata(handles.single_request_progscope_popup,'Temperatur',{'' 'Max' 'Min' 'Mittlere_temp_prog' 'Gesamt'});
 setappdata(handles.single_request_progscope_popup,'Solarleistung',{'' 'Dauer' 'Einstrahlung' 'Gesamt'});
 setappdata(handles.single_request_progscope_popup,'Luftdruck',{'keine Details verfügbar'});
 setappdata(handles.single_request_progscope_popup,'Signifikantes_Wetter',{'keine Details verfügbar'});
@@ -444,6 +444,7 @@ val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_progdetail = string_list{val};
 setappdata(handles.multi_request_progdetail_popup,'sel_progdetail',selected_string_progdetail);
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function multi_request_progdetail_popup_CreateFcn(hObject, eventdata, handles)
@@ -467,7 +468,7 @@ val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_from_progday = string_list{val};
 setappdata(handles.multi_request_from_progday_popup,'sel_from_progday',selected_string_from_progday);
-
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function multi_request_from_progday_popup_CreateFcn(hObject, eventdata, handles)
@@ -491,7 +492,7 @@ val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_from_proghour = string_list{val};
 setappdata(handles.multi_request_from_proghour_popup,'sel_from_proghour',selected_string_from_proghour);
-
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function multi_request_from_proghour_popup_CreateFcn(hObject, eventdata, handles)
@@ -515,7 +516,7 @@ val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_to_proghour = string_list{val};
 setappdata(handles.multi_request_to_proghour_popup,'sel_to_proghour',selected_string_to_proghour);
-
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function multi_request_to_proghour_popup_CreateFcn(hObject, eventdata, handles)
@@ -539,7 +540,7 @@ val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_to_progday = string_list{val};
 setappdata(handles.multi_request_to_progday_popup,'sel_to_progday',selected_string_to_progday);
-
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function multi_request_to_progday_popup_CreateFcn(hObject, eventdata, handles)
@@ -815,7 +816,11 @@ data_struct_check();
 
 % Popup Auswahl ermitteln
 prog_scope = getappdata(handles.multi_request_progscope_popup,'sel_progscope');
-prog_detail = getappdata(handles.multi_request_progdetail_popup,'sel_progdetail');
+if strcmp(prog_scope,'Luftdruck') == 1 || strcmp(prog_scope,'Signifikantes_Wetter') == 1
+    prog_detail = [];
+else
+    prog_detail = getappdata(handles.multi_request_progdetail_popup,'sel_progdetail');
+end
 prog_day_from = getappdata(handles.multi_request_from_progday_popup,'sel_from_progday');
 prog_hour_from = getappdata(handles.multi_request_from_proghour_popup,'sel_from_proghour');
 prog_day_to = getappdata(handles.multi_request_to_progday_popup,'sel_to_progday');
@@ -1313,7 +1318,7 @@ data_struct_check();
 
 % Receive device id from edit field, define request list 
 device_id = get(handles.comset_device_id_text,'String');
-request_list = {'temperature_offset', 'city_id', 'transmitting_station'};  
+request_list = {'temperature_offset', 'city_id', 'transmitting_station', 'temperature'};  
 
 request_value = read_sr(device_id, request_list, hObject, handles);
 
@@ -1321,6 +1326,7 @@ request_value = read_sr(device_id, request_list, hObject, handles);
 set(handles.comset_temp_offset_value,'String',num2str(request_value(1)));
 set(handles.comset_city_id_value,'String',num2str(request_value(2)));
 set(handles.comset_station_value,'String',num2str(request_value(3)));
+set(handles.comset_local_temperature_value,'String',num2str(request_value(4)/10));
 
 guidata(hObject,handles);
 
