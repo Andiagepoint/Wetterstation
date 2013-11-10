@@ -22,7 +22,7 @@ function varargout = UI(varargin)
 
 % Edit the above text to modify the response to help UI
 
-% Last Modified by GUIDE v2.5 27-Oct-2013 13:46:45
+% Last Modified by GUIDE v2.5 09-Nov-2013 11:53:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -82,9 +82,14 @@ set(handles.multi_request_panel,'Visible','off');
 set(handles.com_protocol_panel,'Visible','off');
 
 %Popupmenüeinträge für Prognosestundenangaben
-set(handles.single_request_proghour_popup,'String',{'' 'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
-set(handles.multi_request_from_proghour_popup,'String',{'' 'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
-set(handles.multi_request_to_proghour_popup,'String',{'' 'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
+setappdata(handles.multi_request_from_proghour_popup,'erste_Auspraegung',{'' 'AM0_00' 'AM01_00' 'AM02_00' 'AM03_00' 'AM04_00' 'AM05_00' 'AM06_00' ...
+                                                    'AM07_00' 'AM08_00' 'AM09_00' 'AM10_00' 'AM11_00' 'AM12_00' 'PM01_00' 'PM02_00' 'PM03_00' 'PM04_00' 'PM05_00' 'PM06_00' 'PM07_00' ...
+                                                    'PM08_00' 'PM09_00' 'PM10_00' 'PM11_00' 'Gesamt'});
+setappdata(handles.multi_request_from_proghour_popup,'zweite_Auspraegung',{'' 'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
+setappdata(handles.multi_request_to_proghour_popup,'erste_Auspraegung',{'' 'AM0_00' 'AM01_00' 'AM02_00' 'AM03_00' 'AM04_00' 'AM05_00' 'AM06_00' ...
+                                                    'AM07_00' 'AM08_00' 'AM09_00' 'AM10_00' 'AM11_00' 'AM12_00' 'PM01_00' 'PM02_00' 'PM03_00' 'PM04_00' 'PM05_00' 'PM06_00' 'PM07_00' ...
+                                                    'PM08_00' 'PM09_00' 'PM10_00' 'PM11_00' 'Gesamt'});
+setappdata(handles.multi_request_to_proghour_popup,'zweite_Auspraegung',{'' 'Morgen' 'Vormittag' 'Nachmittag' 'Abend' 'Gesamt'});
 
 %Popupmenüeinträge für Com-Settings
 set(handles.comset_parity_popup,'String',{'' 'none' 'even' 'odd' 'mark' 'space'});
@@ -104,10 +109,13 @@ h = gcf;
 set(h,'DockControls','on');
 
 % Load data structure with reg addresses to workspace
-[filename, pathname] = uigetfile('*.mat','Load register addresses to workspace','C:\Users\AndiPower\Documents\MATLAB\Wetterstation\data_structure_wetterstation.mat');
+[filename, pathname] = uigetfile('*.mat','Load register addresses to workspace','C:\Users\AndiPower\Documents\MATLAB\Wetterstation\weather_station_data.mat');
 load(strcat(pathname,filename));
 assignin('base','data',data);
-
+assignin('base','CityList',CityList);
+assignin('base','CityList_Sorted',CityList_Sorted);
+% Initialize popup menu for city id selection
+set(handles.comset_city_id_popup,'String',strcat('',CityList_Sorted));
 
 % --- Outputs from this function are returned to the command line.
 function varargout = UI_OutputFcn(hObject, eventdata, handles) 
@@ -374,6 +382,12 @@ function multi_request_progscope_popup_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_progscope_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_progscope_popup
+set(handles.multi_request_from_progday_popup,'Value',1);
+set(handles.multi_request_from_proghour_popup,'Value',1);
+set(handles.multi_request_to_progday_popup,'Value',1);
+set(handles.multi_request_to_proghour_popup,'Value',1);
+set(handles.multi_request_progdetail_popup,'Value',1);
+
 val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_prog_scope = string_list{val};
@@ -444,6 +458,19 @@ val = get(hObject,'Value');
 string_list = get(hObject,'String');
 selected_string_progdetail = string_list{val};
 setappdata(handles.multi_request_progdetail_popup,'sel_progdetail',selected_string_progdetail);
+eAf = getappdata(handles.multi_request_from_proghour_popup,'erste_Auspraegung'); 
+eAt = getappdata(handles.multi_request_to_proghour_popup,'erste_Auspraegung');
+zAf = getappdata(handles.multi_request_from_proghour_popup,'zweite_Auspraegung');
+zAt = getappdata(handles.multi_request_to_proghour_popup,'zweite_Auspraegung');
+switch selected_string_progdetail
+    case 'Mittlere_temp_prog'
+        set(handles.multi_request_from_proghour_popup,'String',eAf);
+        set(handles.multi_request_to_proghour_popup,'String',eAt);
+    otherwise
+        set(handles.multi_request_from_to_proghour_popup,'String',zAf);
+        set(handles.multi_request_to_proghour_popup,'String',zAt);
+end
+        
 guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -1018,27 +1045,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-function comset_city_id_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to comset_city_id_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of comset_city_id_edit as text
-%        str2double(get(hObject,'String')) returns contents of comset_city_id_edit as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function comset_city_id_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to comset_city_id_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
 % --- Executes on button press in comset_close_serial_port.
 function comset_close_serial_port_Callback(hObject, eventdata, handles)
 
@@ -1229,7 +1235,7 @@ data_struct_check();
 
 % Get values from edit box
 station = dec2hex(str2double(get(handles.comset_station_edit,'String')),4);
-city_id = dec2hex(str2double(get(handles.comset_city_id_edit,'String')),4);
+city_id = dec2hex(getappdata(handles.comset_city_id_popup,'city_id'),4);
 temp_offset = dec2hex(str2double(get(handles.comset_temp_offset_edit,'String')),4);
 utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
 device_id = dec2hex(str2double(get(handles.comset_device_id_edit,'String')),2);
@@ -1255,13 +1261,13 @@ serial_interface_check();
 data_struct_check();
 
 set(handles.comset_station_edit,'String','1');
-set(handles.comset_city_id_edit,'String','353');
+set(handles.comset_city_id_popup,'Value',587);
 set(handles.comset_temp_offset_edit,'String','0');
 set(handles.comset_utc_offset_edit,'String','0');
 set(handles.comset_device_id_edit,'String','03');
 
 station = dec2hex(str2double(get(handles.comset_station_edit,'String')),4);
-city_id = dec2hex(str2double(get(handles.comset_city_id_edit,'String')),4);
+city_id = dec2hex(353,4);
 temp_offset = dec2hex(str2double(get(handles.comset_temp_offset_edit,'String')),4);
 utc_offset = str2double(get(handles.comset_utc_offset_edit,'String'));
 device_id = dec2hex(str2double(get(handles.comset_device_id_edit,'String')),2);
@@ -1330,3 +1336,31 @@ set(handles.comset_local_temperature_value,'String',num2str(request_value(4)/10)
 
 guidata(hObject,handles);
 
+
+
+% --- Executes on selection change in comset_city_id_popup.
+function comset_city_id_popup_Callback(hObject, eventdata, handles)
+% hObject    handle to comset_city_id_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns comset_city_id_popup contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from comset_city_id_popup
+val = get(hObject,'Value');
+string_list = get(hObject,'String');
+selected_city_name = string_list{val};
+city_id = get_city_id(selected_city_name);
+setappdata(handles.comset_city_id_popup,'city_id',city_id);
+guidata(hObject,handles);
+
+% --- Executes during object creation, after setting all properties.
+function comset_city_id_popup_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to comset_city_id_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
