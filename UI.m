@@ -22,7 +22,7 @@ function varargout = UI(varargin)
 
 % Edit the above text to modify the response to help UI
 
-% Last Modified by GUIDE v2.5 09-Nov-2013 11:53:59
+% Last Modified by GUIDE v2.5 10-Nov-2013 13:13:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -96,7 +96,8 @@ set(handles.comset_parity_popup,'String',{'' 'none' 'even' 'odd' 'mark' 'space'}
 set(handles.comset_baudrate_popup,'String',{'' '9600' '19200'});
 
 %Benennung der Tabellenspalten auf dem Panel Sammelanfrage
-set(handles.multi_request_msg_table,'ColumnName',{'Prognosebereich', 'Prognosedetail', 'Prognosestart', 'Prognoseende', 'Modbus Nachricht', 'Abrufen'});
+set(handles.multi_request_msg_table,'ColumnName',{'Forecast scope', 'Forecast detail', 'Forecast start date', 'Forecast end date', 'Modbus message', 'Request'});
+set(handles.multi_request_msg_table,'ColumnName',{'Forecast scope', 'Forecast detail', 'Forecast date', 'Modbus message', 'Response Value'});
 
 %Initialisiere Protocol Liste
 header = sprintf('%s %s','Communication protocol: ',datestr(now));
@@ -205,164 +206,6 @@ single_data_pathname = uigetdir;
 set(handles.dataexp_show_data_storage_path_edit,'String',single_data_pathname);
 single_data_pathname = get(handles.dataexp_show_data_storage_path_edit,'string');
 
-
-% --- Executes on selection change in single_request_progscope_popup.
-function single_request_progscope_popup_Callback(hObject, eventdata, handles)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns single_request_progscope_popup contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from single_request_progscope_popup
-val = get(hObject,'Value');
-string_list = get(hObject,'String');
-selected_string_prog_scope = string_list{val};
-switch selected_string_prog_scope
-    case 'Luftdruck'
-        Ld = getappdata(handles.single_request_progscope_popup,'Luftdruck');
-        set(handles.single_request_progdetail_popup,'String',Ld);
-        Ld_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
-        set(handles.single_request_progday_popup,'String',Ld_day);
-    case 'Markantes_Wetter'
-        mW = getappdata(handles.single_request_progscope_popup,'Markantes_Wetter');
-        set(handles.single_request_progdetail_popup,'String',mW);
-        mW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
-        set(handles.single_request_progday_popup,'String',mW_day);
-    case 'Niederschlag'
-        niederschlag = getappdata(handles.single_request_progscope_popup,'Niederschlag');
-        set(handles.single_request_progdetail_popup,'String',niederschlag);
-        niederschlag_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
-        set(handles.single_request_progday_popup,'String',niederschlag_day);
-    case 'Signifikantes_Wetter'
-        sW = getappdata(handles.single_request_progscope_popup,'Signifikantes_Wetter');
-        set(handles.single_request_progdetail_popup,'String',sW);
-        sW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
-        set(handles.single_request_progday_popup,'String',sW_day);
-    case 'Solarleistung'
-        solarP = getappdata(handles.single_request_progscope_popup,'Solarleistung');
-        set(handles.single_request_progdetail_popup,'String',solarP);
-        solarP_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
-        set(handles.single_request_progday_popup,'String',solarP_day);
-    case 'Temperatur'
-        tmp = getappdata(handles.single_request_progscope_popup,'Temperatur');
-        set(handles.single_request_progdetail_popup,'String',tmp);
-        tmp_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
-        set(handles.single_request_progday_popup,'String',tmp_day);
-    case 'Wind'
-        wind = getappdata(handles.single_request_progscope_popup,'Wind');
-        set(handles.single_request_progdetail_popup,'String',wind);
-        wind_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
-        set(handles.single_request_progday_popup,'String',wind_day);
-    otherwise
-end
-
-% --- Executes during object creation, after setting all properties.
-function single_request_progscope_popup_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_progscope_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-% --- Executes on selection change in single_request_progdetail_popup.
-function single_request_progdetail_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_progdetail_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns single_request_progdetail_popup contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from single_request_progdetail_popup
-
-
-% --- Executes during object creation, after setting all properties.
-function single_request_progdetail_popup_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_progdetail_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on selection change in single_request_progday_popup.
-function single_request_progday_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_progday_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns single_request_progday_popup contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from single_request_progday_popup
-
-
-% --- Executes during object creation, after setting all properties.
-function single_request_progday_popup_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_progday_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on selection change in single_request_proghour_popup.
-function single_request_proghour_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_proghour_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns single_request_proghour_popup contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from single_request_proghour_popup
-
-
-% --- Executes during object creation, after setting all properties.
-function single_request_proghour_popup_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_proghour_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
-function single_request_msg_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_msg_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of single_request_msg_edit as text
-%        str2double(get(hObject,'String')) returns contents of single_request_msg_edit as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function single_request_msg_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_msg_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in single_request_send_button.
-function single_request_send_button_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_send_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
 % --------------------------------------------------------------------
 function auto_einzel_abruf_Callback(hObject, eventdata, handles)
 % hObject    handle to auto_einzel_abruf (see GCBO)
@@ -467,7 +310,7 @@ switch selected_string_progdetail
         set(handles.multi_request_from_proghour_popup,'String',eAf);
         set(handles.multi_request_to_proghour_popup,'String',eAt);
     otherwise
-        set(handles.multi_request_from_to_proghour_popup,'String',zAf);
+        set(handles.multi_request_from_proghour_popup,'String',zAf);
         set(handles.multi_request_to_proghour_popup,'String',zAt);
 end
         
@@ -704,38 +547,6 @@ for r = 1:t
     end
 end
 
-% --- Executes on selection change in single_request_updateint_popup.
-function single_request_updateint_popup_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_updateint_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns single_request_updateint_popup contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from single_request_updateint_popup
-
-
-% --- Executes during object creation, after setting all properties.
-function single_request_updateint_popup_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_updateint_popup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in single_request_progupdate_checkbox.
-function single_request_progupdate_checkbox_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_progupdate_checkbox (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of single_request_progupdate_checkbox
-
-
 function dataexp_show_data_storage_path_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to dataexp_show_data_storage_path_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -765,6 +576,7 @@ protocol_pathname = uigetdir;
 set(handles.dataexp_show_protocol_storage_path_edit,'String',protocol_pathname);
 protocol_pathname = get(handles.dataexp_show_protocol_storage_path_edit,'String');
 
+
 function dataexp_show_protocol_storage_path_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to text_protocol_storage_path (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -772,19 +584,6 @@ function dataexp_show_protocol_storage_path_edit_Callback(hObject, eventdata, ha
 
 % Hints: get(hObject,'String') returns contents of text_protocol_storage_path as text
 %        str2double(get(hObject,'String')) returns contents of text_protocol_storage_path as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function text_protocol_storage_path_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to text_protocol_storage_path (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
 
 
 % --- Executes on button press in dataexp_select_cumdata_storage_folder_button.
@@ -1130,56 +929,6 @@ else
     close(h)
 end
 
-function single_request_response_edit_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_response_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of single_request_response_edit as text
-%        str2double(get(hObject,'String')) returns contents of single_request_response_edit as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function single_request_response_edit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to single_request_response_edit (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in single_request_add_response_button.
-function single_request_add_response_button_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_add_response_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in single_request_remove_response.
-function single_request_remove_response_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_remove_response (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in single_request_save_response.
-function single_request_save_response_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_save_response (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in single_request_remove_all_responses.
-function single_request_remove_all_responses_Callback(hObject, eventdata, handles)
-% hObject    handle to single_request_remove_all_responses (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
 
 function comset_temp_offset_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to comset_temp_offset_edit (see GCBO)
@@ -1364,3 +1113,360 @@ function comset_city_id_popup_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in single_request_msg_gen_button.
+function single_request_msg_gen_button_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_msg_gen_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+data_struct_check();
+
+% Popup Auswahl ermitteln
+prog_scope = getappdata(handles.single_request_progscope_popup,'sel_progscope');
+if strcmp(prog_scope,'Luftdruck') == 1 || strcmp(prog_scope,'Signifikantes_Wetter') == 1
+    prog_detail = [];
+else
+    prog_detail = getappdata(handles.single_request_progdetail_popup,'sel_progdetail');
+end
+prog_day = getappdata(handles.single_request_progday_popup,'sel_from_progday');
+prog_hour = getappdata(handles.single_request_proghour_popup,'sel_from_proghour');
+
+% Argumente bündeln
+popup_scope_detail = {prog_scope, prog_detail};
+popup_date = {prog_day, prog_hour};
+
+% Registeraddressen ermitteln
+[start_reg_address, field_name] = get_reg_address(popup_scope_detail, popup_date);
+end_reg_address = start_reg_address;
+
+device_address = dec2hex(str2num(get(handles.comset_device_id_edit,'String')),2);
+setappdata(handles.comset_device_id_edit,'dev_address',device_address);
+
+func_code = dec2hex(3,2);
+
+% Überprüfung ob Intervall-Werte richtig ausgewählt wurden
+[quantity_reg_addresses] = input_check(start_reg_address, end_reg_address, func_code, device_address);
+
+% Modbus Nachricht zusammensetzen
+modbus_msg = strcat(device_address,func_code,start_reg_address,quantity_reg_addresses);
+set(handles.single_request_msg_edit,'String',modbus_msg);
+
+% CRC Summe berechnen und komplette Nachricht ausgeben
+[modbus_msg_crc] = crc_calc(modbus_msg);
+setappdata(handles.single_request_msg_edit,'modbus_msg_crc',modbus_msg_crc);
+value = '-';
+table_data_single = {popup_scope_detail{1}, popup_scope_detail{2}, strcat(popup_date{1},'-',popup_date{2}), modbus_msg_crc, value}; 
+setappdata(handles.single_request_msg_gen_button,'table_data_single',table_data_single);
+drawnow;
+
+
+function single_request_response_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_response_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of single_request_response_edit as text
+%        str2double(get(hObject,'String')) returns contents of single_request_response_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_response_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_response_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in single_request_add_response_button.
+function single_request_add_response_button_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_add_response_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+table_data_single = get(handles.single_request_response_table, 'Data');
+add_table_data_single = getappdata(handles.single_request_response_table,'table_data_single');
+if isempty(table_data_single) == 1
+    set(handles.single_request_response_table,'Data',add_table_data_single);
+else
+    if isempty(table_data_single{1}) == 1 
+        set(handles.single_request_response_table,'Data',add_table_data_single);
+    else
+        table_data_single = [table_data_single; add_table_data_single];
+        set(handles.single_request_response_table,'Data',table_data_single);
+    end
+end
+set(handles.single_request_response_table,'ColumnWidth',{100 100 150 150 110 80});
+drawnow;
+
+
+% --- Executes on button press in single_request_remove_response.
+function single_request_remove_response_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_remove_response (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+selected_row = getappdata(handles.single_request_response_table,'SelRow');
+table_data_single = get(handles.single_request_response_table, 'Data');
+table_data_single(selected_row,:)=[];
+set(handles.single_request_response_table,'Data',table_data_single);
+drawnow;
+
+% --- Executes on button press in single_request_save_response.
+function single_request_save_response_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_save_response (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in single_request_remove_all_responses.
+function single_request_remove_all_responses_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_remove_all_responses (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+table_data_single = get(handles.single_request_response_table, 'Data');
+table_data_single(:,:)=[];
+set(handles.single_request_response_table,'Data',table_data_single);
+drawnow;
+
+% --- Executes on selection change in single_request_updateint_popup.
+function single_request_updateint_popup_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_updateint_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns single_request_updateint_popup contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from single_request_updateint_popup
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_updateint_popup_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_updateint_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in single_request_progupdate_checkbox.
+function single_request_progupdate_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_progupdate_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of single_request_progupdate_checkbox
+
+
+% --- Executes on selection change in single_request_progscope_popup.
+function single_request_progscope_popup_Callback(hObject, eventdata, handles)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns single_request_progscope_popup contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from single_request_progscope_popup
+set(handles.single_request_progday_popup,'Value',1);
+set(handles.single_request_proghour_popup,'Value',1);
+
+val = get(hObject,'Value');
+string_list = get(hObject,'String');
+selected_string_prog_scope = string_list{val};
+setappdata(handles.single_request_progscope_popup,'sel_progscope',selected_string_prog_scope);
+switch selected_string_prog_scope
+    case 'Luftdruck'
+        Ld = getappdata(handles.single_request_progscope_popup,'Luftdruck');
+        set(handles.single_request_progdetail_popup,'String',Ld);
+        Ld_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
+        set(handles.single_request_progday_popup,'String',Ld_day);
+    case 'Markantes_Wetter'
+        mW = getappdata(handles.single_request_progscope_popup,'Markantes_Wetter');
+        set(handles.single_request_progdetail_popup,'String',mW);
+        mW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',mW_day);
+    case 'Niederschlag'
+        niederschlag = getappdata(handles.single_request_progscope_popup,'Niederschlag');
+        set(handles.single_request_progdetail_popup,'String',niederschlag);
+        niederschlag_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',niederschlag_day);
+    case 'Signifikantes_Wetter'
+        sW = getappdata(handles.single_request_progscope_popup,'Signifikantes_Wetter');
+        set(handles.single_request_progdetail_popup,'String',sW);
+        sW_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',sW_day);
+    case 'Solarleistung'
+        solarP = getappdata(handles.single_request_progscope_popup,'Solarleistung');
+        set(handles.single_request_progdetail_popup,'String',solarP);
+        solarP_day = getappdata(handles.single_request_progday_popup,'erste_Auspraegung');
+        set(handles.single_request_progday_popup,'String',solarP_day);
+    case 'Temperatur'
+        tmp = getappdata(handles.single_request_progscope_popup,'Temperatur');
+        set(handles.single_request_progdetail_popup,'String',tmp);
+        tmp_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',tmp_day);
+    case 'Wind'
+        wind = getappdata(handles.single_request_progscope_popup,'Wind');
+        set(handles.single_request_progdetail_popup,'String',wind);
+        wind_day = getappdata(handles.single_request_progday_popup,'zweite_Auspraegung');
+        set(handles.single_request_progday_popup,'String',wind_day);
+    otherwise
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_progscope_popup_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_progscope_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in single_request_progdetail_popup.
+function single_request_progdetail_popup_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_progdetail_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns single_request_progdetail_popup contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from single_request_progdetail_popup
+val = get(hObject,'Value');
+string_list = get(hObject,'String');
+selected_string_progdetail = string_list{val};
+setappdata(handles.single_request_progdetail_popup,'sel_progdetail',selected_string_progdetail);
+eAf = getappdata(handles.multi_request_from_proghour_popup,'erste_Auspraegung'); 
+zAf = getappdata(handles.multi_request_from_proghour_popup,'zweite_Auspraegung');
+switch selected_string_progdetail
+    case 'Mittlere_temp_prog'
+        set(handles.single_request_proghour_popup,'String',eAf);
+    otherwise
+        set(handles.single_request_proghour_popup,'String',zAf);
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_progdetail_popup_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_progdetail_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in single_request_progday_popup.
+function single_request_progday_popup_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_progday_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns single_request_progday_popup contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from single_request_progday_popup
+val = get(hObject,'Value');
+string_list = get(hObject,'String');
+selected_string_progday = string_list{val};
+setappdata(handles.single_request_progday_popup,'sel_from_progday',selected_string_progday);
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_progday_popup_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_progday_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in single_request_proghour_popup.
+function single_request_proghour_popup_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_proghour_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns single_request_proghour_popup contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from single_request_proghour_popup
+val = get(hObject,'Value');
+string_list = get(hObject,'String');
+selected_string_proghour = string_list{val};
+setappdata(handles.single_request_proghour_popup,'sel_from_proghour',selected_string_proghour);
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_proghour_popup_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_proghour_popup (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function single_request_msg_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_msg_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of single_request_msg_edit as text
+%        str2double(get(hObject,'String')) returns contents of single_request_msg_edit as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function single_request_msg_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to single_request_msg_edit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in single_request_send_button.
+function single_request_send_button_Callback(hObject, eventdata, handles)
+% hObject    handle to single_request_send_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+serial_interface_check();
+data_struct_check();
+
+msg = getappdata(handles.single_request_msg_edit,'modbus_msg_crc');
+field_name = getappdata(handles.single_request_msg_gen_button,'table_data_single');
+field_name = {field_name{1} field_name{2} field_name{3}};
+[ txdata ] = send_and_receive_data(msg, field_name, hObject, handles);
+table_data_single = getappdata(handles.single_request_msg_gen_button,'table_data_single');
+table_data_single{5} = txdata(2);
+set(handles.single_request_response_edit,'String',num2str(txdata(2)));
+setappdata(handles.single_request_response_table,'table_data_single',table_data_single);
+
+
+
+% --- Executes when selected cell(s) is changed in single_request_response_table.
+function single_request_response_table_CellSelectionCallback(hObject, eventdata, handles)
+% hObject    handle to single_request_response_table (see GCBO)
+% eventdata  structure with the following fields (see UITABLE)
+%	Indices: row and column indices of the cell(s) currently selecteds
+% handles    structure with handles and user data (see GUIDATA)
+selected_cells = eventdata.Indices;
+setappdata(handles.single_request_response_table,'SelRow',selected_cells(1));
