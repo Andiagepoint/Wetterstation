@@ -455,7 +455,12 @@ function multi_request_updateint_popup_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns multi_request_updateint_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from multi_request_updateint_popup
-
+val = get(hObject,'Value');
+string_list = get(hObject,'String');
+selected_string_updateint = string_list{val};
+selected_string_updateint_value = selected_string_updateint(length(selected_string_updateint)-1);
+setappdata(handles.multi_request_updateint_popup,'sel_updateint_value',selected_string_updateint_value);
+guidata(hObject,handles);
 
 % --- Executes during object creation, after setting all properties.
 function multi_request_updateint_popup_CreateFcn(hObject, eventdata, handles)
@@ -477,7 +482,12 @@ function multi_request_update_checkbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of multi_request_update_checkbox
-
+if (get(hObject,'Value') == get(hObject,'Max'))
+   setappdata(handles.multi_request_update_checkbox,'checkbox_set',1);
+else
+   setappdata(handles.multi_request_update_checkbox,'checkbox_set',0);
+end
+guidata(hObject,handles);
 
 % --- Executes on button press in multi_request_msg_add_button.
 function multi_request_msg_add_button_Callback(hObject, eventdata, handles)
@@ -537,14 +547,47 @@ function multi_request_msg_sendbutton_Callback(hObject, eventdata, handles)
 serial_interface_check();
 data_struct_check();
 
-table_data = get(handles.multi_request_msg_table,'Data');
-t = size(table_data,1);
-for r = 1:t
-    if table_data{r,6} == 1
-    msg = table_data{r,5};
-    field_name = {table_data{r,1} table_data{r,2} table_data{r,3} table_data{r,4}};
-    [ txdata ] = send_and_receive_data(msg, field_name, hObject, handles);
-    end
+update_checkbox = getappdata(handles.multi_request_update_checkbox,'checkbox_set');
+update_interval = getappdata(handles.multi_request_updateint_popup,'sel_updateint_value');
+
+if update_checkbox == 1
+    
+    table_data = get(handles.multi_request_msg_table,'Data');
+    size_table_data = size(table_data,1);
+    
+    t = timer;
+    t.StartDelay = 3;
+    t.TimerFcn = {@send_loop, size_table_data, table_data, hObject, handles};
+    t.StopFcn = @stop_timer;
+    t.Period = 60;
+    t.TasksToExecute = 2;
+    t.ExecutionMode = 'fixedSpacing';
+    start(t);    
+%     send_loop(size_table_data, table_data, hObject, handles);
+%     for r = 1:t
+%         if table_data{r,6} == 1
+%         msg = table_data{r,5};
+%         field_name = {table_data{r,1} table_data{r,2} table_data{r,3} table_data{r,4}};
+%         [ txdata ] = send_and_receive_data(msg, field_name, hObject, handles);
+%         end
+%     end
+%     if strcmp(t.Running,'off') == 1
+%     delete(t);
+%     end
+else
+ 
+    table_data = get(handles.multi_request_msg_table,'Data');
+    t = size(table_data,1);
+    
+    send_loop(t, table_data, hObject, handles);
+%     for r = 1:t
+%         if table_data{r,6} == 1
+%         msg = table_data{r,5};
+%         field_name = {table_data{r,1} table_data{r,2} table_data{r,3} table_data{r,4}};
+%         [ txdata ] = send_and_receive_data(msg, field_name, hObject, handles);
+%         end
+%     end
+    
 end
 
 function dataexp_show_data_storage_path_edit_Callback(hObject, eventdata, handles)

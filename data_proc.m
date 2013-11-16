@@ -67,14 +67,14 @@ else
             hex_value = strcat(hi_byte,lo_byte);
             dec_value = hex2dec(hex_value);
             if strcmp(field_name{2},'Mittlere_temp_prog')==1
-                response_data(z) = fprintf('%s %s %s - %s, %u \n', field_name{1}, field_name{2}, days{t}, hours_detailed{s}, dec_value)
+                 fprintf('%s %s %s - %s, %u \n', field_name{1}, field_name{2}, days{t}, hours_detailed{s}, dec_value)
             else
-                response_data(z) = fprintf('%s %s %s - %s, %u \n', field_name{1}, field_name{2}, days{t}, hours_rough{s}, dec_value)
+                 fprintf('%s %s %s - %s, %u \n', field_name{1}, field_name{2}, days{t}, hours_rough{s}, dec_value)
             end
 
             lfvara = lfvara + 2;
             lfvare = lfvare + 2;
-            z = z + 1;
+%             z = z + 1;
             pause(0.1)
 
         end
