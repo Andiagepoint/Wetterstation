@@ -558,16 +558,13 @@ update_end_date = get(handles.multi_request_end_date,'String');
 
 if strcmp(update_start_date,date) == 1
     end_of_day = datevec(date)+[0 0 0 24 0 0];
-    start_of_day = datevec(now);
-    diff_today = etime(end_of_day,start_of_day)/3600;
-    diff_days = days365(update_start_date,update_end_date)*24;
-    update_cycle_number = floor((diff_today+diff_days)/update_interval);
+    start_of_day = datevec(update_start_date);
+    diff = etime(start_of_day,end_of_day)/3600;
 else
-    diff_days = days365(update_start_date,update_end_date)*24;
-    update_cycle_number = floor(diff_days/update_interval);
-end
+    diff = days365(update_start_date,update_end_date)
 
-update_interval_hours = update_interval*10;
+update_cycle_number = days365(update_start_date,update_end_date);
+update_interval = update_interval*10;
 
 if update_checkbox == 1
     
@@ -578,7 +575,7 @@ if update_checkbox == 1
     t.StartDelay = 3;
     t.TimerFcn = {@send_loop, size_table_data, table_data, hObject, handles};
     t.StopFcn = @stop_timer;
-    t.Period = update_interval_hours;
+    t.Period = update_interval;
     t.TasksToExecute = update_cycle_number;
     t.ExecutionMode = 'fixedSpacing';
     start(t);

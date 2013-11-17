@@ -1,7 +1,8 @@
-function [  ] = stop_timer( t )
+function [  ] = stop_timer(mTimer,~)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
-delete(t);
+disp('Automatic requests finished.');
+delete(mTimer)
 
 end
 
