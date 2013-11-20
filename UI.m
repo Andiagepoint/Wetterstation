@@ -581,6 +581,10 @@ if update_checkbox == 1
 % The waiting period for the timer: interval for an update times 3600 sec
     update_interval_hours = update_interval*3600;
 
+    % Create cell array for data aquisition
+    weather_data = cell(1,4);
+    assignin('base','weather_data',weather_data);
+    
     % Here all requests are listed in a table, size of that table defines
     % the number of loops
     table_data = get(handles.multi_request_msg_table,'Data');
@@ -605,7 +609,7 @@ else
     table_data = get(handles.multi_request_msg_table,'Data');
     t = size(table_data,1);
     
-    send_loop('','', t, table_data, hObject, handles);
+    send_loop('','', t, table_data, hObject, handles, '');
     
 end
 
@@ -919,7 +923,7 @@ close_serial_port( serial_interface );
 
 % Show disconnected status in gui through color change to red
 set(handles.status_con_status,'BackgroundColor',[1 0 0]);
-set(handles.status_con_status,'String','Nicht verbunden');
+set(handles.status_con_status,'String','Disconnected');
 set(handles.status_con_quality_text,'Backgroundcolor',[1 0 0]);
 
 % Clears the bar plot
@@ -1516,10 +1520,10 @@ data_struct_check();
 msg = getappdata(handles.single_request_msg_edit,'modbus_msg_crc');
 field_name = getappdata(handles.single_request_msg_gen_button,'table_data_single');
 field_name = {field_name{1} field_name{2} field_name{3}};
-[ txdata ] = send_and_receive_data(msg, field_name, hObject, handles);
+[ txdata ] = send_and_receive_data(msg, field_name, hObject, handles, '');
 table_data_single = getappdata(handles.single_request_msg_gen_button,'table_data_single');
-table_data_single{5} = txdata(2);
-set(handles.single_request_response_edit,'String',num2str(txdata(2)));
+table_data_single{5} = txdata;
+set(handles.single_request_response_edit,'String',table_data_single{5});
 setappdata(handles.single_request_response_table,'table_data_single',table_data_single);
 
 

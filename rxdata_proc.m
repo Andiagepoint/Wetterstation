@@ -1,4 +1,4 @@
-function [ response_data, crc_check_value, response_msg, err_msg ] = rxdata_proc( rxdata, modbus_msg, field_name, hObject, handles )
+function [ response_data, crc_check_value, response_msg, err_msg ] = rxdata_proc( rxdata, modbus_msg, field_name, hObject, handles, cycle_number )
 %UNTITLED5 Summary of this function goes here
 %   Detailed explanation goes here
 not_done = 1;
@@ -46,7 +46,7 @@ while not_done == 1
                     if byte_count > (size(rxdata,1)-5)
                     [ value ] = send_and_receive_data( modbus_msg, field_name, hObject, handles );
                     end
-                    response_data = data_proc( rxdata(4:end-2), reg_address, field_name );
+                    response_data = data_proc( rxdata(4:end-2), reg_address, field_name, cycle_number );
                     [crc_check_value, response_msg] = crc_check(rxdata);
                 case 5
                     output_address = dec2hex(rxdata(3:4),4);

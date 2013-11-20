@@ -1,4 +1,4 @@
-function [ value ] = send_and_receive_data( modbus_msg, field_name, hObject, handles )
+function [ value ] = send_and_receive_data( modbus_msg, field_name, hObject, handles, cycle_number )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 serial_interface = evalin('base','serial_interface');
@@ -26,7 +26,7 @@ end
 
 [rxdata] = fread(serial_interface, bytes_num, 'uint8');
 
-[value, crc_check_value, response_msg, error_msg] = rxdata_proc( rxdata, modbus_msg, field_name, hObject, handles );
+[value, crc_check_value, response_msg, error_msg] = rxdata_proc( rxdata, modbus_msg, field_name, hObject, handles, cycle_number );
 
 if crc_check_value == 0
    crc_check_text = sprintf('CRC Check failed');
