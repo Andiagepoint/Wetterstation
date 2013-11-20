@@ -97,7 +97,7 @@ set(handles.comset_baudrate_popup,'String',{'' '9600' '19200'});
 
 %Benennung der Tabellenspalten auf dem Panel Sammelanfrage
 set(handles.multi_request_msg_table,'ColumnName',{'Forecast scope', 'Forecast detail', 'Forecast start date', 'Forecast end date', 'Modbus message', 'Request'});
-set(handles.multi_request_msg_table,'ColumnName',{'Forecast scope', 'Forecast detail', 'Forecast date', 'Modbus message', 'Response Value'});
+set(handles.single_request_response_table,'ColumnName',{'Forecast scope', 'Forecast detail', 'Forecast date', 'Modbus message', 'Response Value'});
 
 %Popup-Menü-Inhalt für Intervallschritte
 set(handles.multi_request_updateint_popup,'String',{'','6h','12h','18h','24h'});
@@ -551,29 +551,46 @@ function multi_request_msg_sendbutton_Callback(hObject, eventdata, handles)
 serial_interface_check();
 data_struct_check();
 
+% If update checkbox is activated update_checkbox will be 1.
 update_checkbox = getappdata(handles.multi_request_update_checkbox,'checkbox_set');
-update_interval = getappdata(handles.multi_request_updateint_popup,'sel_updateint_value');
-update_start_date = get(handles.multi_request_start_date,'String');
-update_end_date = get(handles.multi_request_end_date,'String');
 
-if strcmp(update_start_date,date) == 1
-    end_of_day = datevec(date)+[0 0 0 24 0 0];
-    start_of_day = datevec(now);
-    diff_today = etime(end_of_day,start_of_day)/3600;
-    diff_days = days365(update_start_date,update_end_date)*24;
-    update_cycle_number = floor((diff_today+diff_days)/update_interval);
-else
-    diff_days = days365(update_start_date,update_end_date)*24;
-    update_cycle_number = floor(diff_days/update_interval);
-end
-
-update_interval_hours = update_interval*10;
-
+% Decision between a single update call or an automated update cycle
+% defined by the start and end date.
 if update_checkbox == 1
-    
+    update_interval = getappdata(handles.multi_request_updateint_popup,'sel_updateint_value');
+    update_start_date = get(handles.multi_request_start_date,'String');
+    update_end_date = get(handles.multi_request_end_date,'String');
+
+% If start date is today you first have to calculate the remaining hours
+% till the end of that day, then you have to calculte the difference
+% between the start and the end date to receive the number of days.
+% Multiply with 24 to get the hours for those days. The number of update
+% cycles is calculated then by dividing the sum of available hours round
+% down the result and add 1 for the immediate request at time zero.
+    if strcmp(update_start_date,date) == 1
+        end_of_day = datevec(date)+[0 0 0 24 0 0];
+        start_of_day = datevec(now);
+        diff_today = etime(end_of_day,start_of_day)/3600;
+        diff_days = days365(update_start_date,update_end_date)*24;
+        update_cycle_number = floor((diff_today+diff_days)/update_interval)+1;
+    else
+        diff_days = days365(update_start_date,update_end_date)*24;
+        update_cycle_number = floor(diff_days/update_interval);
+    end
+
+% The waiting period for the timer: interval for an update times 3600 sec
+    update_interval_hours = update_interval*3600;
+
+    % Here all requests are listed in a table, size of that table defines
+    % the number of loops
     table_data = get(handles.multi_request_msg_table,'Data');
     size_table_data = size(table_data,1);
     
+    % A timer is defined here to control the automatic update cycles.
+    % Requests start with a 3 sec delay. The function to be executed after
+    % the waiting period is send_loop, which triggers the communication
+    % between Matlab and the weather station. The stop function deletes the
+    % timer object after all tasks have been executed. 
     t = timer;
     t.StartDelay = 3;
     t.TimerFcn = {@send_loop, size_table_data, table_data, hObject, handles};
@@ -584,11 +601,11 @@ if update_checkbox == 1
     start(t);
     
 else
- 
+    
     table_data = get(handles.multi_request_msg_table,'Data');
     t = size(table_data,1);
     
-    send_loop(t, table_data, hObject, handles);
+    send_loop('','', t, table_data, hObject, handles);
     
 end
 
