@@ -974,11 +974,13 @@ if isempty(request_value)
 else
     waitbar(3/4,h)
     % Displays the signal quality in a bar plot
-    bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');
-    hold on;
+%     bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');    
+%     evalin('base','hold on');
     if request_value < 9
     bar(handles.status_con_quality_bar,(request_value+1:9),(request_value+1:9),'w');
     end
+    hold(handles.status_con_quality_bar);
+    bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');
     set(handles.status_con_quality_bar,'XLim',[-0.5 10]);
     set(handles.status_con_quality_bar,'YLim',[0 10]);
     set(handles.status_con_quality_bar,'XTickLabelMode','Manual');
@@ -986,12 +988,14 @@ else
     set(handles.status_con_quality_bar,'YTickLabelMode','Manual');
     set(handles.status_con_quality_bar,'YTick',[]);
 
+    hold off;
+    
     waitbar(4/4,h)
     % Changes Backgroundcolor of quality text in GUI
     if request_value >= 5
         set(handles.status_con_quality_text,'Backgroundcolor',[0 1 0]);
     end 
-
+    
     close(h)
 end
 

@@ -21,7 +21,7 @@ if size(request_list,2) > 1
         modbus_msg = gen_msg(device_id, reg_address, reg_num, 'rr');
 
         % Send message and evaluate the response, write status to protocol
-        request_value(t) = send_and_receive_data(modbus_msg, field_name, hObject, handles);
+        request_value(t) = send_and_receive_data(modbus_msg, field_name, hObject, handles,'');
     end
 
     close(wb);
@@ -37,7 +37,7 @@ else
     modbus_msg = gen_msg(device_id, reg_address, reg_num, 'rr');
     
     % Send message and evaluate the response, write status to protocol
-    request_value = send_and_receive_data(modbus_msg, field_name, hObject, handles);
+    request_value = send_and_receive_data(modbus_msg, field_name, hObject, handles, '');
 end
 
 end
