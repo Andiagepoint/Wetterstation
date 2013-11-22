@@ -11,9 +11,7 @@ if cycle_number == 1
     size_new_data_r = 1;
     weather_data{1,size(weather_data,2)+2} = [];
     size_weather_data_c = size(weather_data,2);
-    
 else
-    
     size_weather_data_r = size(weather_data,1);
     size_new_data_r = size(new_data,1);
 end

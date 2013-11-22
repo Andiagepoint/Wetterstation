@@ -18,7 +18,7 @@ new_data = evalin('base','new_data');
 weather_data = evalin('base','weather_data');
 
 path = get(handles.dataexp_show_cumdata_storage_path_edit,'String');
-filename = stracat(path,'\new_data_',date,'_',num2str(date2utc(datevec(now))),'.mat');
+filename = strcat(path,'\new_data_',date,'_',num2str(date2utc(datevec(now))),'.mat');
 save(filename,'new_data','-mat');
 if size(weather_data,2) > 6
 weather_data(:,size(weather_data,2)-1:size(weather_data,2)) = new_data;

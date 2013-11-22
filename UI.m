@@ -551,12 +551,11 @@ function multi_request_msg_sendbutton_Callback(hObject, eventdata, handles)
 serial_interface_check();
 data_struct_check();
 
-
 % Create cell array for data aquisition
     weather_data = cell(1,4);
     assignin('base','weather_data',weather_data);
     new_data = cell(1,2);
-    assignin('base','new_data');
+    assignin('base','new_data',new_data);
     
 % If update checkbox is activated update_checkbox will be 1.
 update_checkbox = getappdata(handles.multi_request_update_checkbox,'checkbox_set');
@@ -979,8 +978,6 @@ if isempty(request_value)
 else
     waitbar(3/4,h)
     % Displays the signal quality in a bar plot
-%     bar(handles.status_con_quality_bar,(0:request_value),(0:request_value),'r');    
-%     evalin('base','hold on');
     if request_value < 9
     bar(handles.status_con_quality_bar,(request_value+1:9),(request_value+1:9),'w');
     end
@@ -993,7 +990,7 @@ else
     set(handles.status_con_quality_bar,'YTickLabelMode','Manual');
     set(handles.status_con_quality_bar,'YTick',[]);
 
-    hold off;
+    hold(handles.status_con_quality_bar);
     
     waitbar(4/4,h)
     % Changes Backgroundcolor of quality text in GUI
