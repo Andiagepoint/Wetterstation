@@ -4,15 +4,16 @@ function [ dec_value ] = data_proc( value, reg_address, field_name, cycle_number
 data = evalin('base','data');
 
 weather_data = evalin('base','weather_data');
+new_data = evalin('base','new_data');
 
 if cycle_number == 1
     size_weather_data_r = 1;
     size_new_data_r = 1;
     weather_data{1,size(weather_data,2)+2} = [];
     size_weather_data_c = size(weather_data,2);
-    new_data = cell(1,2);
+    
 else
-    new_data = evalin('base','new_data');
+    
     size_weather_data_r = size(weather_data,1);
     size_new_data_r = size(new_data,1);
 end

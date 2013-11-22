@@ -551,6 +551,13 @@ function multi_request_msg_sendbutton_Callback(hObject, eventdata, handles)
 serial_interface_check();
 data_struct_check();
 
+
+% Create cell array for data aquisition
+    weather_data = cell(1,4);
+    assignin('base','weather_data',weather_data);
+    new_data = cell(1,2);
+    assignin('base','new_data');
+    
 % If update checkbox is activated update_checkbox will be 1.
 update_checkbox = getappdata(handles.multi_request_update_checkbox,'checkbox_set');
 
@@ -581,9 +588,7 @@ if update_checkbox == 1
 % The waiting period for the timer: interval for an update times 3600 sec
     update_interval_hours = update_interval*3600;
 
-    % Create cell array for data aquisition
-    weather_data = cell(1,4);
-    assignin('base','weather_data',weather_data);
+    
     
     % Here all requests are listed in a table, size of that table defines
     % the number of loops
@@ -609,7 +614,7 @@ else
     table_data = get(handles.multi_request_msg_table,'Data');
     t = size(table_data,1);
     
-    send_loop('','', t, table_data, hObject, handles, '');
+    send_loop('','', t, table_data, hObject, handles);
     
 end
 
