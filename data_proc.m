@@ -99,14 +99,7 @@ else
                 dec_value = dec_value - 65536;
             end
             
-%             if  size(weather_data,2) < 7
-%                 weather_data_col_utc = 5;
-%                 weather_data_col_data = 6;
-%             else
-%                 weather_data_col_utc = size(weather_data,2) - 1;
-%                 weather_data_col_data = size(weather_data,2);
-%             end
-            
+
             if strcmp(field_name{2},'Mittlere_temp_prog')==1
                 fprintf('%s %s %s - %s, %u %u \n', field_name{1}, field_name{2}, days{t}, hours_detailed{s}, date2utc(datevec(now)), dec_value)
                 if size(weather_data,2) < 7
