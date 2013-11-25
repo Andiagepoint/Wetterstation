@@ -962,7 +962,7 @@ open_serial_port( comport, baudrate, databit, parity, stopbit );
 waitbar(2/4,h)
 % Indicate connection status in the gui with a color change to green
 set(handles.status_con_status,'BackgroundColor',[0 1 0]);
-set(handles.status_con_status,'String','Verbunden');
+set(handles.status_con_status,'String','Connected');
 
 % Check connection quality
 device_id = get(handles.comset_device_id_text,'String');
